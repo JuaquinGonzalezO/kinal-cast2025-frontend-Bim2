@@ -1,0 +1,7 @@
+export * from './validateAvatar.jsx'
+export * from './validateEmail.jsx'
+export * from './validatePassword.jsx'
+export * from './validateUser.jsx'
+export * from './validateDescription.jsx'
+export * from './validateConfirPassword.jsx'
+export * from './validateTitle.jsx'

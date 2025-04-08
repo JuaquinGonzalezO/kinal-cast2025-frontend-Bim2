@@ -1,107 +1,100 @@
 import { useState } from "react";
-import { Logo } from './Logo'
+import { Logo } from './Logo';
 import { Input } from './Input';
-import { 
+import {
     emailValidationMessage,
     validateEmail,
     validatePasswordMessage,
     validatePassword
-  
+} from '../shared/validators';
+import { useLogin } from '../shared/hooks'
 
-} from '../shared/validators'
-import { useLogin } from "../shared/hooks";
+export const Login = ({ switchAuthHandler }) => {
+    const { login, isLoading } = useLogin();
 
-export const Login = ({switchAuthHandler})=>{
-    const { login,isLoandig } = useLogin();
     const [formState, setFormState] = useState({
-        email:{
-            value:'',
+        email: {
+            value: '',
             isValid: false,
             showError: false
         },
-        password:{
-            value:'',
+        password: {
+            value: '',
             isValid: false,
             showError: false
         }
     });
 
+    const handleInputValueChange = (value, field) => {
+        setFormState((prevState) => ({
+            ...prevState,
+            [field]: {
+                ...prevState[field],
+                value
+            }
+        }));
+    }
 
-const handleInputValueChange = (value, field)=>{
-    setFormState((prevState) => ({
-        ...prevState,
-        [field]:{
-            ...prevState[field],
-            value
-        }
-    }))
-
-}
-
-    const handleInputValidationOnBlur = (value, field) =>{
+    const handleInputValidationOnBlur = (value, field) => {
         let isValid = false;
-        switch(field){
+        switch (field) {
             case 'email':
                 isValid = validateEmail(value);
                 break;
             case 'password':
                 isValid = validatePassword(value);
                 break;
-
+            default:
+                break;
         }
-
-        setFormState((prevState)=>({
+        setFormState((prevState) => ({
             ...prevState,
-            [field]:{
+            [field]: {
                 ...prevState[field],
                 isValid,
                 showError: !isValid
             }
         }));
-
     }
 
-
-    const handleLogin = (event) =>{
+    const handleLogin = (event) => {
         event.preventDefault();
         login(formState.email.value, formState.password.value);
     }
 
-    const isSubmitButtonDisiable = isLoandig ||!formState.email.isValid || !formState.password.isValid
+    const isSubmitButtonDisable = isLoading || !formState.email.isValid || !formState.password.isValid;
 
-    return(
+    return (
         <div className="login-container">
-            <Logo text={'login Kinal Cast'}/>
-            <form className="auth/fomr"/>
-            <Input
+            <Logo text={'Login Kinal Cast'} />
+            <form className="auth-form">
+                <Input
                     field='email'
                     label='Email'
                     value={formState.email.value}
                     onChangeHandler={handleInputValueChange}
                     type='text'
-                    onBurHandler={handleInputValidationOnBlur}
+                    onBlurHandler={handleInputValidationOnBlur}
                     showErrorMessage={formState.email.showError}
                     validationMessage={emailValidationMessage}
                 />
-                  <Input
+                <Input
                     field='password'
                     label='Password'
                     value={formState.password.value}
                     onChangeHandler={handleInputValueChange}
                     type='password'
-                    onBurHandler={handleInputValidationOnBlur}
+                    onBlurHandler={handleInputValidationOnBlur}
                     showErrorMessage={formState.password.showError}
                     validationMessage={validatePasswordMessage}
                 />
-
-                <button onClick={handleLogin} disabled={isSubmitButtonDisiable}>
-                    log in
+                <button onClick={handleLogin} disabled={isSubmitButtonDisable}>
+                    Log in
                 </button>
-            <form/>
+            </form>
             <span onClick={switchAuthHandler} className="auth-form-switch-label">
-                Don' t have an acconunt ? sing up
+                Don't have an account? Sign up
             </span>
         </div>
     )
-
 }

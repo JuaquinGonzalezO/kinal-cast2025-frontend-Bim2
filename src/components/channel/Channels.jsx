@@ -1,35 +1,27 @@
-import {useNavigate} from "react-router-dom"
-import { channelCard } from "./ChannelsCard"
+import { useNavigate } from "react-router-dom";
+import { ChannelCard } from "./ChannelCard";
 
-
-export const Chanels = ({chanels}) =>{
+export const Channels = ({channels}) => {
     
     const navigate = useNavigate()
 
-    const handleNavigateToChannel = (id) =>{
-        navigate(`/channel${id}`)
+    const handleNavigateToChannel = (id) => {
+        navigate(`/channel/${id}`)
     }
 
-
-    return(
+    return (
         <div className="channels-container">
-            {chanels.map((c)=>(
-                <channelCard
-                key={c.id}
-                id={c.id}
-                title={c.title}
-                username={c.username}
-                isOnline={c.isOnline}
-                avatarUrl={c.avatarUrl}
-                navigateToChannelHandler={c.navigateToChannelHandler}
-                
-                
-                
+            { channels.map((c) => (
+                <ChannelCard
+                    key={c.id}
+                    id={c.id}
+                    title={c.title}
+                    username={c.username}
+                    isOnline={c.isOnline}
+                    avatarUrl={c.avatarUrl}
+                    navigateToChannelHandler={handleNavigateToChannel}
                 />
             ))}
-
-
-
         </div>
     )
 }

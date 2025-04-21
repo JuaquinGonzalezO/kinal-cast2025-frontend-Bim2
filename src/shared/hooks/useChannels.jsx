@@ -1,49 +1,46 @@
 import { useState } from "react";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 import { getChannels as getChannelsRequest, getFollowedChannels } from "../../services/api";
 
-export const useChannels = () =>{
-    
-    const [channels, setChannels] = useState(null)
+export const useChannels = () => {
 
-    const getChannels = async (isLogged = false) =>{
+    const [ channels, setChannels ] = useState(null)
 
-        const channelIsdata = await getChannelsRequest()
+    const getChannels = async (isLogged = false) => {
 
-        if(channelIsdata.error){
-            return  toast.error(
-                channelIsdata.e?.response?.data || 'Ocurrio un erro a leer los canales'
+        const channelsData = await getChannelsRequest()
+
+        if(channelsData.error){
+            return toast.error(
+                channelsData.e?.response?.data || 'Ocurrio un error al leer los canales'
             )
-
         }
 
-        if(isLogged){
+        if(!isLogged){
             return setChannels({
-                channels: channelIsdata.data.channels
+                channels: channelsData.data.channels
             });
-            
         }
 
         const followedChannelsData = await getFollowedChannels();
 
         if(followedChannelsData.error){
             return toast.error(
-                channelIsdata.e?.response?.data || 'Ocurrio un error al leer los canales que sigues'
+                channelsData.e?.response?.data || 'Ocurrio un error al leer los canales que sigues'
             )
         }
- 
+
         setChannels({
-            channels: channelIsdata.data.channels,
-            followedChannels: channelIsdata.data.channels.filter( channel =>
+            channels: channelsData.data.channels,
+            followedChannels: channelsData.data.channels.filter( channel =>
                 followedChannelsData.data.followedChannels.includes(channel.id)
             )
         });
     }
 
-
-    return{
+    return {
         getChannels,
-        isFetching : !Boolean(channels),
+        isFetching: !Boolean(channels),
         allChannels: channels?.channels,
         followedChannels: channels?.followedChannels
     }

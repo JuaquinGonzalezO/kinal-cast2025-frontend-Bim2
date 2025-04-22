@@ -112,4 +112,33 @@ export const ChannelSettings = ({ settings, saveSettings }) => {
             description: formState.description.value
         })
     }
+
+    const isSubmitButtonDisiabled = !formState.username.isValid ||  
+    !formState.title.isValid ||
+    !formState.avatarUrl.isValid ||
+    !formState.description.isValid
+
+    return(
+        <form className="settings-form">
+            {inputs.map((input)=>(
+                <Input
+                key={input.field}
+                field={input.field}
+                label={input.label}
+                value={formState[input.field].value}
+                onChangeHandler={handleInputValueChange}
+                onBlurHandler={handleInputValidationOnBlur}
+                showErrorMessage={formState[input.field].showError} 
+                validationMessage={input.validationMessage}
+                type={input.type}
+                textArea={input.textarea}                  
+                />
+            ))}
+               <button onClick={handleFormSubmit} disabled={isSubmitButtonDisiabled}>
+                 Update
+             </button>
+
+        </form>
+    )
+
 }

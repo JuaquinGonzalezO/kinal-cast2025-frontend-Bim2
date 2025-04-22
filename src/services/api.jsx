@@ -91,7 +91,7 @@ export const updateChannelSettings = async (data) => {
 export const getFollowedChannels = async () => {
     try {
         return await apiClient.get('/channels/followed')
-    } catch (error) {
+    } catch (e) {
         checkResponseStatus(e)
         return {
             error: true,
@@ -99,6 +99,35 @@ export const getFollowedChannels = async () => {
         }
     }
 }
+
+export const getChannelDetails = async(channelId) =>{
+    try {
+       return await apiClient.get(`/channels${channelId}`) 
+    } catch (e) {
+       return{
+        error: true,
+        e
+       }
+    }
+}
+
+
+export const followeChannel = async (channelId) =>{
+    try {
+        
+        return await apiClient.post('/channelsFollow', {channelId})
+
+    } catch (e) {
+        return{
+            error:true,
+            e
+        }
+        
+    }
+
+}
+
+
 
 const checkResponseStatus = (e) => {
     const responseStatus = e?.response.status
